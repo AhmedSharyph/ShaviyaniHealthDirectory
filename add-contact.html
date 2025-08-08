@@ -115,6 +115,26 @@
       flex-shrink: 0;
       cursor: pointer;
     }
+/* Navbar span font size for desktop */
+#add-contact-navbar ul span {
+  font-size: 1rem;
+}
+
+/* Hamburger icon default size */
+#add-contact-navbar .navbar-toggler {
+  font-size: 1.25rem; /* adjust if needed */
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  #add-contact-navbar ul span {
+    font-size: 0.8rem; /* smaller font on phones */
+  }
+
+  #add-contact-navbar .navbar-toggler {
+    font-size: 1rem; /* smaller hamburger icon on mobile */
+  }
+}
 
     @media (min-width: 992px) {
       #hamburgerBtn {
@@ -345,3 +365,4 @@
 </body>
 
 </html>
+
