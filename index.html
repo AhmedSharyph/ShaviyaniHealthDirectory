@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Shaviyani Health Directory</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- PWA manifest and theme color -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#00695c" />
+
+  <!-- Apple meta for iOS PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+
+  <!-- Bootstrap 5 CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    html, body {
+      margin: 0; 
+      padding: 0;
+      background-color: #f7f9fc;
+      color: #333;
+    }
+
+    body {
+      padding-top: var(--navbar-height, 56px);
+      background: #f8f9fa;
+    }
+
+    /* Default for desktop */
+    h2 {
+      font-size: 1.3rem;
+    }
+
+    /* Smaller size for mobile screens */
+    @media (max-width: 768px) {
+      h2 {
+        font-size: 1.0rem;
+      }
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0; 
+      left: 0; 
+      right: 0;
+      background: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 1030;
+      padding: 0.25rem 1rem;
+    }
+
+    .navbar-brand {
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .navbar-container {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      gap: 1rem;
+      flex-wrap: nowrap;
+    }
+
+    #searchForm {
+      flex-grow: 1;
+      min-width: 0;
+      display: flex;
+    }
+
+    #searchInput {
+      width: 100%;
+      min-width: 0;
+    }
+
+    #navbarNav {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 0.25rem;
+      box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.15);
+      min-width: 140px;
+      display: none;
+      z-index: 1050;
+      padding: 0.5rem 0;
+    }
+
+    /* Align nav ul to right (mobile default is column layout) */
+    #navbarNav .navbar-nav {
+      margin-left: auto;
+      flex-direction: column !important;
+      align-items: flex-end !important;
+      padding-left: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    #navbarNav.show {
+      display: block;
+    }
+
+    #navbarNav .nav-item {
+      margin: 0.2rem 0;
+    }
+
+    #navbarNav .nav-link {
+      padding: 0.25rem 1rem;
+      font-weight: 500;
+      color: #333;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      display: block;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    #navbarNav .nav-link:hover,
+    #navbarNav .nav-link:focus {
+      color: #00695c;
+      text-decoration: none;
+    }
+
+    #navbarNav .active,
+    #navbarNav .disabled {
+      font-weight: 700;
+      color: #004d40;
+      cursor: default;
+    }
+
+    #hamburgerBtn {
+      border: none;
+      background: transparent;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    @media (min-width: 992px) {
+      #hamburgerBtn {
+        display: none;
+      }
+
+      #navbarNav {
+        position: static !important;
+        display: flex !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        min-width: auto !important;
+        margin-top: 0 !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+      }
+
+      #navbarNav .navbar-nav {
+        flex-direction: row !important;
+        align-items: center !important;
+        margin-left: auto !important;
+      }
+
+      #navbarNav .nav-item {
+        margin: 0 0.5rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .site-title {
+        display: none !important;
+      }
+
+      #searchForm {
+        margin: 0.5rem 0 0 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light" role="navigation" aria-label="Main navigation">
+    <div class="container-fluid navbar-container">
+      <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <img src="./logo.png" alt="Logo" width="30" height="30" class="me-2" />
+        <span class="site-title d-none d-lg-inline">Shaviyani Health Directory</span>
+      </a>
+
+      <form id="searchForm" class="d-flex" role="search" onsubmit="return false;">
+        <input
+          id="searchInput"
+          class="form-control form-control-sm"
+          type="search"
+          placeholder="🔍 Search by any field..."
+          autocomplete="off"
+          aria-label="Search directory"
+        />
+      </form>
+
+      <button id="hamburgerBtn" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarNav" type="button">
+        &#9776;
+      </button>
+
+      <div id="navbarNav" class="collapse navbar-collapse">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="add-contact.html" aria-current="page">Add Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container mt-4" id="directoryContainer">
+    <p class="no-results">Loading data…</p>
+  </main>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const currentPage = location.pathname.split('/').pop() || 'index.html';
+
+      // Show search only on homepage
+      const searchForm = document.getElementById('searchForm');
+      if (searchForm && currentPage !== 'index.html') {
+        searchForm.style.display = 'none';
+      }
+
+      // Highlight current page link
+      document.querySelectorAll('#navbarNav .nav-link').forEach(link => {
+        if (link.getAttribute('href') === currentPage) {
+          link.classList.add('active');
+          link.setAttribute('aria-current', 'page');
+          link.style.pointerEvents = 'none';
+        }
+      });
+
+      // Set navbar height CSS variable to prevent content jump
+      const navbar = document.querySelector('.navbar');
+      if (navbar) {
+        document.body.style.setProperty('--navbar-height', navbar.offsetHeight + 'px');
+      }
+
+      // Hamburger menu toggle
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const navbarNav = document.getElementById('navbarNav');
+      hamburgerBtn.addEventListener('click', () => {
+        const expanded = hamburgerBtn.getAttribute('aria-expanded') === 'true';
+        hamburgerBtn.setAttribute('aria-expanded', !expanded);
+        navbarNav.classList.toggle('show');
+      });
+    });
+
+    // Register service worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then(reg => console.log('Service Worker registered:', reg))
+          .catch(err => console.error('Service Worker registration failed:', err));
+      });
+    }
+
+    // Add to Home Screen prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      // Show the prompt immediately
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(choice => {
+        if (choice.outcome === 'accepted') {
+          console.log('User accepted the A2HS prompt');
+        } else {
+          console.log('User dismissed the A2HS prompt');
+        }
+        deferredPrompt = null;
+      });
+    });
+  </script>
+
+  <!-- Your main JavaScript -->
+  <script src="js/main.js"></script>
+</body>
+</html>
