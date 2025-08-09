@@ -1,6 +1,6 @@
 const CACHE_NAME = 'health-directory-cache-v1';
 const urlsToCache = [
-  '/',
+  '/shaviyanihealthdirectory/',
   '/index.html',
   '/add-contact.html',
   '/manifest.json',
